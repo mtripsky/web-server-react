@@ -12,12 +12,14 @@ const firebaseConfig = {
 };
 
 const app = Firebase.initializeApp(firebaseConfig);
-const db = app.database();
+//const db = app.database();
 //const firebase = require('firebase');
 //const functions = require('firebase-functions');
 
 //firebase.initializeApp(functions.config(firebaseConfig).firebase);
 
-//const db = app.firestore();
+export const firestoreDb = app.firestore();
+export const firebaseDb = app.database();
 
-export default db;
+// export default firestoreDb;
+// export default firebaseDb;

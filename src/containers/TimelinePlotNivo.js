@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line'
+import './Dashboard.css';
 
 class TimelinePlot extends React.Component {
   render() {
@@ -13,17 +14,17 @@ class TimelinePlot extends React.Component {
       legend: this.props.xAxisLegend,
       // legendOffset: 36,
       legendPosition: 'middle',
-      format: '%H:%M'
+      format: '%H:%M:%S'
     }
     : null;
 
     //console.log(this.props.data[0]);
     return(
-      <div style={{ height: 400 }}>
+      <div className="dashboard__column">
       <ResponsiveLine
         data={this.props.data}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-        xScale={{ type: 'time', format: "%Y-%m-%d %H:%M"}}
+        xScale={{ type: 'time', format: "%Y-%m-%d %H:%M:%S"}}
         yScale={{ type: 'linear',  min: 'auto', max: 'auto', stacked: true, reverse: false }}
         curve="catmullRom"
         axisTop={null}
