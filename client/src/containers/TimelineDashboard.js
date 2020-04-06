@@ -42,6 +42,7 @@ class TimelineDashboard extends React.Component {
   render() {
     var plots = Object.keys(this.props.timeSeries).map((key, index) => {   
       console.log(this.props.timeSeries[key]);
+      console.log(key);
       return (
         <TimelinePlot 
           key={key+index}

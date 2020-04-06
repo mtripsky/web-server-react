@@ -4,7 +4,8 @@ import './Dashboard.css';
 import TimelineDashboard from './TimelineDashboard';
 import WeatherDashboard from './WeatherDashboard';
 import {firebaseDb} from '../db/firebase';
-const moment = require('moment');
+import FetchWeatherData from '../utils/FetchWeatherTimeline';
+import * as moment from 'moment';
 
 class App extends React.Component {
   constructor() {
@@ -29,7 +30,18 @@ class App extends React.Component {
     clearInterval(this.forceUpdateInterval);
   }
 
+  async componentWillMount() {
+    const startTime = moment().utc().startOf('day').unix();
+    //console.log(startTime);
+    const weatherData = await FetchWeatherData.fetchWeatherData(startTime);
+    //console.log(weatherData);
+    this.setState({
+      weatherTimeline:weatherData
+    })
+  }
+
   componentDidMount() {
+    this.forceUpdateInterval = setInterval(() => this.forceUpdate(), 5000);
     var weatherRef = firebaseDb.ref('weather');
     let measurementUpdates= {
       "temperature":[],
@@ -86,6 +98,7 @@ class App extends React.Component {
   }
 
   render() {
+    //console.log(this.state.weatherTimeline);
     return (
       <div className="App">
         <div className="row">

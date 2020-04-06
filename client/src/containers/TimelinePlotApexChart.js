@@ -4,7 +4,8 @@ import ApexCharts from 'react-apexcharts'
 class TimelinePlot extends React.Component {
   constructor(props) {
     super(props);
-
+    console.log("TIMElinePlot");
+    console.log(this.props.series)
     this.state = {
       series: this.props.series,
       options: {

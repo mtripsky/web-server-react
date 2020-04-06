@@ -3,15 +3,34 @@ import DB from './db';
 
 const router = express.Router();
 
-router.get('/api/blogs', async (req, res) => {
+// router.get('/api/temperatures', async (req, res) => {
+//   try {
+//     let temperatures = await DB.Temperatures.all();
+//     res.json(temperatures);
+//   } catch (err) {
+//     console.log(err);
+//     res.sendStatus(500);
+//   }
+// })
+
+router.get('/api/temperatures', async (req, res) => {
   try {
-    let temperatures = await DB.Temperatures.all();
+    let startTime = req.query.startTime;
+    let endTime = req.query.endTime;
+    let sensor = req.query.sensor;
+    let location = req.query.location;
+
+    let temperatures = await DB.Temperatures
+      .allWhere({
+        startTime: startTime, 
+        sensor:sensor,
+        location:location,
+        endTime:endTime});
     res.json(temperatures);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
-
 })
 
 export default router;
