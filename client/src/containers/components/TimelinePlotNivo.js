@@ -1,6 +1,6 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line'
-import './Dashboard.css';
+import '../Dashboard.css';
 
 class TimelinePlot extends React.Component {
   render() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import '../Dashboard.css';
  
 class SensorMeasurement extends React.Component {
   render() {

@@ -1,6 +1,6 @@
-import React from 'react';
-import SensorMeasurement from './SensorMeasurement';
-import './Dashboard.css';
+import React from './node_modules/react';
+import SensorMeasurement from '../components/SensorMeasurement';
+import '../Dashboard.css';
 
 class MeasurementDashboard extends React.Component {
   render() {

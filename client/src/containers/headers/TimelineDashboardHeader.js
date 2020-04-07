@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import '../Dashboard.css';
 
 class TimelineDashboardHeader extends React.Component {
   render() {

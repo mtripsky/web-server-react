@@ -1,5 +1,5 @@
 import React from 'react';
-import './Dashboard.css';
+import '../Dashboard.css';
 
 class WeatherDashboardHeader extends React.Component {
   render() {

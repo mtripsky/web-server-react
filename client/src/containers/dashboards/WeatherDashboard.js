@@ -1,7 +1,7 @@
 import React from 'react';
 import MeasurementDashboard from './MeasurementDashboard';
-import WeatherDashboardHeader from './WeatherDashboardHeader';
-import './Dashboard.css';
+import WeatherDashboardHeader from '../headers/WeatherDashboardHeader';
+import '../Dashboard.css';
 
 class WeatherDashboard extends React.Component {
   render() {

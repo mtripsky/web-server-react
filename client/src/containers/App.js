@@ -1,121 +1,28 @@
-import React from 'react';
-import './App.css';
-import './Dashboard.css';
-import TimelineDashboard from './TimelineDashboard';
-import WeatherDashboard from './WeatherDashboard';
-import {firebaseDb} from '../db/firebase';
-import FetchWeatherData from '../utils/FetchWeatherTimeline';
-import * as moment from 'moment';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-class App extends React.Component {
-  constructor() {
-    super();
+// We'll load our views from the `src/views`
+import NavbarBootstrap from "../views/NavbarBootstrap";
+import Home from "../views/Home";
+import About from "../views/About"
+import Weather from "../views/Weather";
+import FlatClima from "../views/FlatClima";
+import FlatPlants from "../views/FlatPlants";
 
-    this.state = {
-      measurements: {
-        "temperature":[],
-        "humidity":[],
-        "pressure":[]
-      },
-      updatedTime:null,
-      weatherTimeline:{
-        "temperature":[],
-        "humidity":[],
-        "pressure":[]
-      }
-    };
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.forceUpdateInterval);
-  }
-
-  async componentWillMount() {
-    const startTime = moment().utc().startOf('day').unix();
-    //console.log(startTime);
-    const weatherData = await FetchWeatherData.fetchWeatherData(startTime);
-    //console.log(weatherData);
-    this.setState({
-      weatherTimeline:weatherData
-    })
-  }
-
-  componentDidMount() {
-    this.forceUpdateInterval = setInterval(() => this.forceUpdate(), 5000);
-    var weatherRef = firebaseDb.ref('weather');
-    let measurementUpdates= {
-      "temperature":[],
-      "humidity":[],
-      "pressure":[]
-    };
-    let lastUpdatedTime = null;
-
-    weatherRef.once('value', snapshot => {
-        snapshot.forEach((child) => {
-          if(child.key !== 'dew-point')
-          {
-            let sensors = [];
-            child.forEach(c => {
-              sensors.push(
-              {
-                name: c.key, 
-                value:c.child('value').val(), 
-                unit:c.child('unit').val()
-              });
-              lastUpdatedTime = moment.unix(c.child('timeStamp').val()).format("YYYY-MM-DD HH:mm:ss");
-            })
-            measurementUpdates[child.key] = sensors;
-          }
-        });
-      
-      this.setState({
-        measurements:measurementUpdates,
-        updatedTime:lastUpdatedTime
-      })
-    });
-
-    weatherRef.on('child_changed', snapshot => {
-      if(snapshot.key !== 'dew-point')
-      {
-       let sensors = [];
-       snapshot.forEach((child) => {
-         sensors.push(
-           {
-             name: child.key, 
-             value:child.child('value').val(), 
-              unit:child.child('unit').val()
-            });
-            lastUpdatedTime = moment.unix(child.child('timeStamp').val()).format("YYYY-MM-DD HH:mm:ss");
-        })
-        measurementUpdates[snapshot.key] = sensors;
-      }
-      
-      this.setState({
-        measurements:measurementUpdates,
-        updatedTime:lastUpdatedTime
-      })
-    })
-  }
-
-  render() {
-    //console.log(this.state.weatherTimeline);
-    return (
-      <div className="App">
-        <div className="row">
-          <div className="column left-column">
-            <WeatherDashboard
-              measurements={this.state.measurements}
-              updatedTime={this.state.updatedTime}
-            />
-          </div>
-          <div className="column right-column">
-            <TimelineDashboard
-              timeSeries={this.state.weatherTimeline}
-            />
-          </div>
-        </div>
-      </div>
-  )};
-}
+const App = props => {
+  return (
+      <Router>
+        <NavbarBootstrap />
+        <Switch>
+          <Route path="/weather" component={Weather} />
+          <Route path="/flat/clima" component={FlatClima} />
+          <Route path="/flat/plants" component={FlatPlants} />
+          <Route path="/about" component={About} />
+          <Route path="*" component={Home} />
+        </Switch>
+      </Router>
+  );
+};
 
 export default App;

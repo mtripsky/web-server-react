@@ -1,7 +1,7 @@
 import React from 'react';
-import TimelinePlot from './TimelinePlotApexChart.js';
-import TimelineDashboardHeader from './TimelineDashboardHeader';
-import './Dashboard.css';
+import TimelinePlot from '../TimelinePlotApexChart.js';
+import TimelineDashboardHeader from '../headers/TimelineDashboardHeader';
+import '../Dashboard.css';
 
 class TimelineDashboard extends React.Component {
   constructor(props) {
