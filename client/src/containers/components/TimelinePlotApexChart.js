@@ -1,11 +1,11 @@
 import React from 'react';
-import ApexCharts from 'react-apexcharts'
+import ApexCharts from 'react-apexcharts';
 
 class TimelinePlot extends React.Component {
   constructor(props) {
     super(props);
-    console.log("TIMElinePlot");
-    console.log(this.props.series)
+    console.log('TIMElinePlot');
+    console.log(this.props.series);
     this.state = {
       series: this.props.series,
       options: {
@@ -13,22 +13,22 @@ class TimelinePlot extends React.Component {
           //height: "100%",
           type: 'line',
           zoom: {
-            enabled: true
-          }
+            enabled: true,
+          },
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         stroke: {
-          curve: 'straight'
+          curve: 'straight',
         },
         title: {
           text: 'Product Trends by Month',
-          align: 'center'
+          align: 'center',
         },
         grid: {
           row: {
-          //  colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            //  colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
             //opacity: 0.5
           },
         },
@@ -39,20 +39,25 @@ class TimelinePlot extends React.Component {
           labels: {
             datetimeFormatter: {
               year: 'yyyy',
-              month: 'MMM \'yy',
+              month: "MMM 'yy",
               day: 'dd MMM',
-              hour: 'HH:mm'
-            }
-          }
-        }
-      },   
+              hour: 'HH:mm',
+            },
+          },
+        },
+      },
     };
   }
 
   render() {
     return (
-      <div className="measurement-row">
-        <ApexCharts options={this.state.options} series={this.state.series} type="line" height="100%"/>
+      <div className='measurement-row'>
+        <ApexCharts
+          options={this.state.options}
+          series={this.state.series}
+          type='line'
+          height='100%'
+        />
       </div>
     );
   }

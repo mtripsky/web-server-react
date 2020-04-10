@@ -5,15 +5,14 @@ import MeasurementsDashboard from '../containers/dashboards/MeasurementsDashboar
 import { firebaseDb } from '../db/firebase';
 import * as moment from 'moment';
 
-class Weather extends React.Component {
+class FlatMonitor extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      weatherTimeline: {
+      timeline: {
         temperature: [],
         humidity: [],
-        pressure: [],
       },
     };
   }
@@ -21,17 +20,17 @@ class Weather extends React.Component {
   render() {
     return (
       <div className='App'>
-        <h1>Weather</h1>
+        <h1>Living Room</h1>
         <div className='row'>
           <div className='column left-column'>
             <MeasurementsDashboard
-              measurements={['temperature', 'humidity', 'pressure']}
-              realDb='weather/'
+              measurements={['temperature', 'humidity']}
+              realDb='home/clima'
               updatedTime={this.state.updatedTime}
             />
           </div>
           <div className='column right-column'>
-            <TimelineDashboard timeSeries={this.state.weatherTimeline} />
+            <TimelineDashboard timeSeries={this.state.timeline} />
           </div>
         </div>
       </div>
@@ -39,4 +38,4 @@ class Weather extends React.Component {
   }
 }
 
-export default Weather;
+export default FlatMonitor;

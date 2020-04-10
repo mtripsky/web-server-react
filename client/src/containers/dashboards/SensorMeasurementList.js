@@ -1,12 +1,12 @@
-import React from './node_modules/react';
+import React from 'react';
 import SensorMeasurement from '../components/SensorMeasurement';
 import '../Dashboard.css';
 
-class MeasurementDashboard extends React.Component {
+class SensorMeasurementList extends React.Component {
   render() {
-    const sensorsMeasurement = this.props.sensors.map((sensor) => {     
+    const sensorsMeasurement = this.props.sensors.map((sensor) => {
       return (
-        <SensorMeasurement 
+        <SensorMeasurement
           key={sensor.name + sensor.unit}
           value={sensor.value}
           unit={sensor.unit}
@@ -15,15 +15,13 @@ class MeasurementDashboard extends React.Component {
       );
     });
 
-    return(
-      <div className="measurement-row">
+    return (
+      <div className='measurement-row'>
         <h3>{this.props.title.toUpperCase()}</h3>
-        <div>
-          {sensorsMeasurement}
-        </div>
+        <div>{sensorsMeasurement}</div>
       </div>
-    )
+    );
   }
 }
 
-export default MeasurementDashboard;
+export default SensorMeasurementList;
