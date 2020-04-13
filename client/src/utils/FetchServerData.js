@@ -44,6 +44,41 @@ export const fetchWeatherData = async (startTime) => {
   });
 };
 
+export const fetchFlatData = async (startTime) => {
+  const [tempData, humidData] = await Promise.all([
+    await fetch(`/api/temperatures?startTime=${startTime}&location=LR`),
+    await fetch(`/api/humidities?startTime=${startTime}&location=LR`),
+  ]);
+
+  const [temperatures, humidities] = await Promise.all([
+    await tempData.json(),
+    await humidData.json(),
+  ]);
+
+  return new Promise((resolve, reject) => {
+    resolve({
+      temperature: [serializeFetchedDbData(temperatures, 'DHT22')],
+      humidity: [serializeFetchedDbData(humidities, 'DHT22')],
+    });
+  });
+};
+
+export const fetchPlantData = async (startTime, plant) => {
+  const [soil_moistureData] = await Promise.all([
+    await fetch(`/api/plants?startTime=${startTime}&plant=${plant}`),
+  ]);
+
+  const [soil_moisture] = await Promise.all([await soil_moistureData.json()]);
+
+  return new Promise((resolve, reject) => {
+    resolve({
+      soil_moisture: [serializeFetchedDbData(soil_moisture, 'Soil Moisture')],
+    });
+  });
+};
+
 export default {
   fetchWeatherData,
+  fetchFlatData,
+  fetchPlantData,
 };

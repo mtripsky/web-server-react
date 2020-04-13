@@ -4,33 +4,33 @@ import { GetColors } from '../../utils/PlotDescriptionHelper';
 
 class TimelinePlot extends React.Component {
   MapPropsToData(props) {
-    //console.log(props.series);
     const colors = GetColors(props.series.length);
-    //console.log(colors);
     return props.series.map((dataset, index) => {
-      //console.log(dataset.data);
-      //console.log(index);
       return {
         label: dataset.name,
         data: dataset.data,
-        borderWidth: 1,
+        borderWidth: 2,
         fill: false,
         borderColor: colors[index],
-        pointBackgroundColor: 'rgb(255,255,255)',
       };
     });
   }
 
   MapPropsToOptions(props) {
-    //console.log(props);
     return {
+      elements: {
+        point: {
+          radius: 0,
+        },
+      },
+      legend: {
+        position: 'top',
+        align: 'end',
+      },
       scales: {
         yAxes: [
           {
-            // ticks: {
-            //   suggestedMin: 0,
-            //   suggestedMax: 40
-            // },
+            ticks: props.yAxisTicks,
             scaleLabel: {
               display: true,
               labelString: props.yAxisName + props.yAxisUnit,
@@ -40,38 +40,15 @@ class TimelinePlot extends React.Component {
         xAxes: [
           {
             type: 'time',
-            // ticks: {
-            //   source: 'data'
-            // },
-            // time: {
-            //   //parser: 'YYYY-MM-DD HH:mm',
-            //   //parser: 'YYYY-MM-DD HH:mm',
-            //   unit: 'minute',
-            //   unitStepSize: 30,
-            // }
             time: {
               parser: 'YYYY-MM-DD HH:mm',
-              //round: 'day',
               tooltipFormat: 'll HH:mm',
-              unit: 'minute',
-              unitStepSize: 30,
-            },
-            scaleLabel: {
-              display: true,
-              labelString: 'Date',
             },
             ticks: {
-              major: {
-                enabled: true,
-              },
-              fontStyle: function (context) {
-                return context.tick && context.tick.major ? 'bold' : undefined;
-              },
-              fontColor: function (context) {
-                return context.tick && context.tick.major
-                  ? '#FF0000'
-                  : undefined;
-              },
+              min: props.xAxisStart,
+              max: props.xAxisEnd,
+              display: true,
+              fontSize: 10,
             },
           },
         ],
@@ -80,15 +57,14 @@ class TimelinePlot extends React.Component {
   }
 
   render() {
-    //const datasets = ;
     const dataset = { datasets: this.MapPropsToData(this.props) };
-    //console.log(this.MapPropsToOptions(this.props));
     return (
       <div className='measurement-row'>
         <Line
           data={dataset}
           options={this.MapPropsToOptions(this.props)}
-          height='15%'
+          position='relative'
+          height='18%'
           width='95%'
         />
       </div>

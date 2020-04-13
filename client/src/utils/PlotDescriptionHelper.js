@@ -6,41 +6,60 @@ export const MapKeyToUnit = (key) => {
       return ' [%]';
     case 'pressure':
       return ' [hPa]';
-    case 'soil-moisture':
+    case 'soil_moisture':
       return ' [%]';
     default:
       return '';
   }
 };
 
-export const FirstLetterToUpper = (word) => {
-  return word.charAt(0).toUpperCase() + word.slice(1);
+export const MapKeyToLabelString = (key) => {
+  let result = '';
+  key.split('_').map((word) => {
+    result += word.charAt(0).toUpperCase() + word.slice(1) + ' ';
+  });
+  return result;
 };
 
-export const GetColors = (arraySize) => {
-  const a = 255;
-  let array = [];
-  array.push('rgb(255,0,0)');
-
-  if (arraySize > 1) {
-    const step = (a * Math.sqrt(3)) / (arraySize - 1);
-    for (let i = 1; i < arraySize; ++i) {
-      const r = Math.ceil(a - Math.sin((35 * Math.PI) / 180) * step * i);
-      const b = Math.floor(
-        Math.cos((35 * Math.PI) / 180) *
-          step *
-          i *
-          Math.cos((45 * Math.PI) / 180)
-      );
-      const g = Math.floor(
-        Math.cos((35 * Math.PI) / 180) *
-          step *
-          i *
-          Math.cos((45 * Math.PI) / 180)
-      );
-      array.push('rgb(' + r + ', ' + g + ', ' + b + ')');
-    }
+// FIX-ME: min and max are hard-coded, but it should take in future data to find min and max
+export const MapYAxisTicks = (key) => {
+  switch (key) {
+    case 'temperature':
+      return {
+        suggestedMin: 10,
+        suggestedMax: 30,
+        display: true,
+        stepSize: 5,
+        // padding: 12,
+      };
+    case 'humidity':
+      return {
+        suggestedMin: 10,
+        suggestedMax: 90,
+        display: true,
+        stepSize: 10,
+      };
+    case 'pressure':
+      return {
+        suggestedMin: 1014,
+        suggestedMax: 1024,
+        display: true,
+        stepSize: 2,
+      };
+    case 'soil_moisture':
+      return {
+        suggestedMin: 30,
+        suggestedMax: 90,
+        display: true,
+        stepSize: 10,
+      };
+    default:
+      return {
+        display: true,
+      };
   }
+};
 
-  return array;
+export const GetColors = () => {
+  return ['#ff0000', '#0000ff', '#00ff00', '#ff00ff', '#00ffff', '#ffff00'];
 };

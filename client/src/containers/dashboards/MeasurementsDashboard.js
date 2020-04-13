@@ -16,14 +16,14 @@ class MeasurementsDashboard extends React.Component {
   }
 
   componentDidMount() {
-    var weatherRef = firebaseDb.ref(this.props.realDb);
+    var ref = firebaseDb.ref(this.props.realDb);
     let measurementUpdates = Object.assign(
       {},
       ...this.props.measurements.map((key) => ({ [key]: [] }))
     );
     let lastUpdatedTime = null;
 
-    weatherRef.once('value', (snapshot) => {
+    ref.once('value', (snapshot) => {
       snapshot.forEach((child) => {
         if (this.props.measurements.includes(child.key)) {
           let sensors = [];
@@ -47,7 +47,7 @@ class MeasurementsDashboard extends React.Component {
       });
     });
 
-    weatherRef.on('child_changed', (snapshot) => {
+    ref.on('child_changed', (snapshot) => {
       if (this.props.measurements.includes(snapshot.key)) {
         let sensors = [];
         snapshot.forEach((child) => {

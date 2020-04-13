@@ -2,7 +2,7 @@ import React from 'react';
 import '../containers/Dashboard.css';
 import TimelineDashboard from '../containers/dashboards/TimelineDashboard';
 import MeasurementsDashboard from '../containers/dashboards/MeasurementsDashboard';
-import { firebaseDb } from '../db/firebase';
+import { fetchWeatherData } from '../utils/FetchServerData';
 import * as moment from 'moment';
 
 class Weather extends React.Component {
@@ -10,13 +10,32 @@ class Weather extends React.Component {
     super(props);
 
     this.state = {
-      weatherTimeline: {
+      startTime: null,
+      endTime: moment()
+        .add(1, 'days')
+        .startOf('day')
+        .format('YYYY-MM-DD HH:mm'),
+      timeSeries: {
         temperature: [],
         humidity: [],
         pressure: [],
       },
     };
   }
+
+  handleLoadData = async () => {
+    try {
+      // db has unix timestamp in seconds in UTC zone
+      const startTime = moment().startOf('day').unix();
+      const result = await fetchWeatherData(startTime);
+      this.setState({
+        timeSeries: result,
+        startTime: moment().startOf('day').format('YYYY-MM-DD HH:mm'),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   render() {
     return (
@@ -27,11 +46,15 @@ class Weather extends React.Component {
             <MeasurementsDashboard
               measurements={['temperature', 'humidity', 'pressure']}
               realDb='weather/'
-              updatedTime={this.state.updatedTime}
             />
           </div>
           <div className='column right-column'>
-            <TimelineDashboard timeSeries={this.state.weatherTimeline} />
+            <TimelineDashboard
+              loadData={this.handleLoadData}
+              timeSeries={this.state.timeSeries}
+              startTime={this.state.startTime}
+              endTime={this.state.endTime}
+            />
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import '../Dashboard.css';
+import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 
 class TimelineDashboardHeader extends React.Component {
   render() {
@@ -15,7 +16,11 @@ class TimelineDashboardHeader extends React.Component {
     return (
       <div className='dashboard-header'>
         <h4></h4>
-        {buttons}
+        <ToggleButtonGroup type='radio' name='options' defaultValue={1}>
+          <ToggleButton value={1}>Radio 1 (pre-checked)</ToggleButton>
+          <ToggleButton value={2}>Radio 2</ToggleButton>
+          <ToggleButton value={3}>Radio 3</ToggleButton>
+        </ToggleButtonGroup>
       </div>
     );
   }
