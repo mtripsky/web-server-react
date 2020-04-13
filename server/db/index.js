@@ -23,6 +23,9 @@ export const AllFromStartTime = async (args) => {
       if (args.location) {
         sql += ` AND location = '${args.location}'`;
       }
+      if (args.plant) {
+        sql += ` AND plant = '${args.plant}'`;
+      }
       Connection.query(sql, (err, results) => {
         if (err) {
           console.log(err);

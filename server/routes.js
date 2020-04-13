@@ -51,4 +51,21 @@ router.get('/api/pressures', async (req, res) => {
   }
 });
 
+router.get('/api/plants', async (req, res) => {
+  try {
+    let plantMeasurement = await DB.AllFromStartTime({
+      table: 'plants',
+      startTime: req.query.startTime,
+      endTime: req.query.endTime,
+      sensor: req.query.sensor,
+      location: req.query.location,
+      plant: req.query.plant,
+    });
+    res.json(plantMeasurement);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
 export default router;
