@@ -1,9 +1,11 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { GetColors } from '../../utils/PlotDescriptionHelper';
+import * as moment from 'moment';
+import { Card } from 'react-bootstrap';
 
-class TimelinePlot extends React.Component {
-  MapPropsToData(props) {
+const TimelinePlot = (props) => {
+  function MapPropsToData() {
     const colors = GetColors(props.series.length);
     return props.series.map((dataset, index) => {
       return {
@@ -16,7 +18,7 @@ class TimelinePlot extends React.Component {
     });
   }
 
-  MapPropsToOptions(props) {
+  function MapPropsToOptions() {
     return {
       elements: {
         point: {
@@ -45,8 +47,8 @@ class TimelinePlot extends React.Component {
               tooltipFormat: 'll HH:mm',
             },
             ticks: {
-              min: props.xAxisStart,
-              max: props.xAxisEnd,
+              min: moment.unix(props.xAxisStart),
+              max: moment.unix(props.xAxisEnd),
               display: true,
               fontSize: 10,
             },
@@ -56,20 +58,18 @@ class TimelinePlot extends React.Component {
     };
   }
 
-  render() {
-    const dataset = { datasets: this.MapPropsToData(this.props) };
-    return (
-      <div className='measurement-row'>
-        <Line
-          data={dataset}
-          options={this.MapPropsToOptions(this.props)}
-          position='relative'
-          height='18%'
-          width='95%'
-        />
-      </div>
-    );
-  }
-}
+  const dataset = { datasets: MapPropsToData() };
+  return (
+    <>
+      <Line
+        data={dataset}
+        options={MapPropsToOptions()}
+        position='relative'
+        height='20%'
+        width='95%'
+      />
+    </>
+  );
+};
 
 export default TimelinePlot;

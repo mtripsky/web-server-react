@@ -1,95 +1,87 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SensorMeasurementList from './SensorMeasurementList';
 import MeasurementsDashboardHeader from '../headers/MeasurementsDashboardHeader';
 import '../Dashboard.css';
+import { Card } from 'react-bootstrap';
 import { firebaseDb } from '../../db/firebase';
 import * as moment from 'moment';
 
-class MeasurementsDashboard extends React.Component {
-  constructor(props) {
-    super(props);
+const MeasurementsDashboard = (props) => {
+  const [measurements, setMeasurements] = React.useState({});
+  const [updatedTime, setUpdatedTime] = React.useState(null);
 
-    this.state = {
-      measurements: {},
-      updatedTime: null,
-    };
+  function setMeasurementsUpdatesForFirebaseSnapshot(
+    child,
+    measurementUpdates
+  ) {
+    if (props.measurements.includes(child.key)) {
+      let sensors = [];
+      child.forEach((c) => {
+        sensors.push({
+          name: c.key,
+          value: c.child('value').val(),
+          unit: c.child('unit').val(),
+        });
+        setUpdatedTime(
+          moment.unix(c.child('timeStamp').val()).format('YYYY-MM-DD HH:mm')
+        );
+      });
+      measurementUpdates[child.key] = sensors;
+    }
   }
 
-  componentDidMount() {
-    var ref = firebaseDb.ref(this.props.realDb);
+  useEffect(() => {
+    const ref = firebaseDb.ref(props.realDb);
     let measurementUpdates = Object.assign(
       {},
-      ...this.props.measurements.map((key) => ({ [key]: [] }))
+      ...props.measurements.map((key) => ({ [key]: [] }))
     );
-    let lastUpdatedTime = null;
 
     ref.once('value', (snapshot) => {
       snapshot.forEach((child) => {
-        if (this.props.measurements.includes(child.key)) {
-          let sensors = [];
-          child.forEach((c) => {
-            sensors.push({
-              name: c.key,
-              value: c.child('value').val(),
-              unit: c.child('unit').val(),
-            });
-            lastUpdatedTime = moment
-              .unix(c.child('timeStamp').val())
-              .format('YYYY-MM-DD HH:mm');
-          });
-          measurementUpdates[child.key] = sensors;
-        }
+        setMeasurementsUpdatesForFirebaseSnapshot(child, measurementUpdates);
       });
 
-      this.setState({
-        measurements: measurementUpdates,
-        updatedTime: lastUpdatedTime,
-      });
+      setMeasurements(measurementUpdates);
     });
 
-    ref.on('child_changed', (snapshot) => {
-      if (this.props.measurements.includes(snapshot.key)) {
-        let sensors = [];
-        snapshot.forEach((child) => {
-          sensors.push({
-            name: child.key,
-            value: child.child('value').val(),
-            unit: child.child('unit').val(),
-          });
-          lastUpdatedTime = moment
-            .unix(child.child('timeStamp').val())
-            .format('YYYY-MM-DD HH:mm');
-        });
-        measurementUpdates[snapshot.key] = sensors;
-      }
+    ref.on('child_changed', (child) => {
+      setMeasurementsUpdatesForFirebaseSnapshot(child, measurementUpdates);
 
-      this.setState({
-        measurements: measurementUpdates,
-        updatedTime: lastUpdatedTime,
-      });
+      setMeasurements(measurementUpdates);
     });
-  }
+  }, []);
 
-  render() {
-    const measurements = Object.keys(this.state.measurements).map(
-      (key, index) => {
-        return (
-          <SensorMeasurementList
-            key={key + index}
-            title={key}
-            sensors={this.state.measurements[key]}
-          />
-        );
-      }
-    );
-
-    return (
-      <div className='width-90'>
-        <MeasurementsDashboardHeader timeUpdated={this.state.updatedTime} />
-        <div className='dashboard__column'>{measurements}</div>
-      </div>
-    );
-  }
-}
+  return (
+    <div className='width-90'>
+      <MeasurementsDashboardHeader timeUpdated={updatedTime} />
+      <Card>
+        {Object.keys(measurements).map((key, index) => {
+          return (
+            <SensorMeasurementList
+              key={key + index}
+              title={key}
+              sensors={measurements[key]}
+            />
+          );
+        })}
+      </Card>
+    </div>
+  );
+};
 
 export default MeasurementsDashboard;
+
+{
+  /* <div className='dashboard__column'>
+        {Object.keys(measurements).map((key, index) => {
+          return (
+            <SensorMeasurementList
+              key={key + index}
+              title={key}
+              sensors={measurements[key]}
+            />
+          );
+        })}
+      </div> */
+}

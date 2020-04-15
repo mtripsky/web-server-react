@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 // We'll load our views from the `src/views`
 import NavbarBootstrap from '../views/NavbarBootstrap';

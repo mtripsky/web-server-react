@@ -1,14 +1,15 @@
 import React from 'react';
+import { Card } from 'react-bootstrap';
 import '../Dashboard.css';
 
-class MeasurementsDashboardHeader extends React.Component {
-  render() {
-    return (
-      <div className='dashboard-header'>
-        <h4>Updated ({this.props.timeUpdated})</h4>
-      </div>
-    );
-  }
-}
+const MeasurementsDashboardHeader = (props) => {
+  return (
+    <Card className='text-center'>
+      <Card.Footer>
+        <small className='text-muted'>Last updated {props.timeUpdated}</small>
+      </Card.Footer>
+    </Card>
+  );
+};
 
 export default MeasurementsDashboardHeader;

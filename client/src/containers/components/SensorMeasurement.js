@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Card } from 'react-bootstrap';
 import '../Dashboard.css';
+import { roundToOne } from '../../utils/Calculator';
 
-class SensorMeasurement extends React.Component {
-  render() {
-    return (
-      <div className='measurement__value'>
-        <div>
-          {this.props.value}
-          {this.props.unit}
-        </div>
-        {this.props.sensorName.toUpperCase()}
-      </div>
-    );
-  }
-}
+const SensorMeasurement = (props) => {
+  const cardStyle = 'Light';
+  return (
+    <>
+      <Card
+        className='text-center'
+        bg={cardStyle.toLowerCase()}
+        text={cardStyle.toLowerCase() === 'light' ? 'dark' : 'white'}
+      >
+        <Card.Header>{props.sensorName.toUpperCase()}</Card.Header>
+        <Card.Body>
+          <Card.Title>
+            {roundToOne(props.value)}
+            {props.unit}
+          </Card.Title>
+        </Card.Body>
+      </Card>
+      <br />
+    </>
+  );
+};
 
 export default SensorMeasurement;

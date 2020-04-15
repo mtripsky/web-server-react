@@ -2,28 +2,37 @@ import React from 'react';
 import '../Dashboard.css';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 
-class TimelineDashboardHeader extends React.Component {
-  render() {
-    var buttons = [
-      '1 day',
-      '3 days',
-      '1 week',
-      '2 weeks',
-      '1 month',
-      '3 months',
-    ].map((text) => <button key={text}>{text}</button>);
-
+const TimelineDashboardHeader = (props) => {
+  const intervalButtons = () => {
+    const buttonStyle = 'outline-dark';
     return (
-      <div className='dashboard-header'>
-        <h4></h4>
-        <ToggleButtonGroup type='radio' name='options' defaultValue={1}>
-          <ToggleButton value={1}>Radio 1 (pre-checked)</ToggleButton>
-          <ToggleButton value={2}>Radio 2</ToggleButton>
-          <ToggleButton value={3}>Radio 3</ToggleButton>
-        </ToggleButtonGroup>
-      </div>
+      <ToggleButtonGroup
+        type='radio'
+        name='options'
+        defaultValue={'1 days'}
+        onChange={props.handleChange}
+        size='sm'
+      >
+        <ToggleButton value={'1 days'} variant={buttonStyle}>
+          1 day
+        </ToggleButton>
+        <ToggleButton value={'3 days'} variant={buttonStyle}>
+          3 days
+        </ToggleButton>
+        <ToggleButton value={'1 weeks'} variant={buttonStyle}>
+          1 week
+        </ToggleButton>
+        <ToggleButton value={'2 weeks'} variant={buttonStyle}>
+          2 weeks
+        </ToggleButton>
+        <ToggleButton value={'1 months'} variant={buttonStyle}>
+          1 month
+        </ToggleButton>
+      </ToggleButtonGroup>
     );
-  }
-}
+  };
+
+  return <small>{intervalButtons()}</small>;
+};
 
 export default TimelineDashboardHeader;

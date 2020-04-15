@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 // import { Provider } from "react-redux";
 import App from './App';
 // import configureStore from "../redux/configureStore.js";

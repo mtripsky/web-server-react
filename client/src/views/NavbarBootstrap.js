@@ -1,7 +1,5 @@
 //import './Navbar.css';
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-//import { connect } from "react-redux";
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 
 export const NavbarBootstrap = () => (

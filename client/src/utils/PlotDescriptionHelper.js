@@ -26,7 +26,7 @@ export const MapYAxisTicks = (key) => {
   switch (key) {
     case 'temperature':
       return {
-        suggestedMin: 10,
+        suggestedMin: 15,
         suggestedMax: 30,
         display: true,
         stepSize: 5,
@@ -34,7 +34,7 @@ export const MapYAxisTicks = (key) => {
       };
     case 'humidity':
       return {
-        suggestedMin: 10,
+        suggestedMin: 30,
         suggestedMax: 90,
         display: true,
         stepSize: 10,
