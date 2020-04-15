@@ -1,9 +1,8 @@
 import React from 'react';
-import { CardDeck, Card, CardGroup } from 'react-bootstrap';
+import { Card, CardGroup } from 'react-bootstrap';
 import SensorMeasurement from '../components/SensorMeasurement';
-import '../Dashboard.css';
 
-const SensorMeasurementList = (props) => {
+const SensorsList = (props) => {
   const sensorsMeasurement = props.sensors.map((sensor) => {
     return (
       <SensorMeasurement
@@ -11,11 +10,12 @@ const SensorMeasurementList = (props) => {
         value={sensor.value}
         unit={sensor.unit}
         sensorName={sensor.name}
+        showDayExtremes={props.showDayExtremes}
+        getDayExtremes={props.getDayExtremes}
+        quantity={props.title}
       />
     );
   });
-
-  const cardStyle = 'Light';
 
   return (
     <>
@@ -30,11 +30,4 @@ const SensorMeasurementList = (props) => {
   );
 };
 
-export default SensorMeasurementList;
-
-// <Card
-//       className='text-center'
-//       bg={cardStyle.toLowerCase()}
-//       text={cardStyle.toLowerCase() === 'light' ? 'dark' : 'white'}
-//     >
-//     </Card>
+export default SensorsList;

@@ -9,7 +9,7 @@ export const MapKeyToUnit = (key) => {
     case 'soil_moisture':
       return ' [%]';
     default:
-      return '';
+      return ' [%]';
   }
 };
 

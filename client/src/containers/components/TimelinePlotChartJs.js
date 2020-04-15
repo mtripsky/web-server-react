@@ -2,10 +2,9 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 import { GetColors } from '../../utils/PlotDescriptionHelper';
 import * as moment from 'moment';
-import { Card } from 'react-bootstrap';
 
 const TimelinePlot = (props) => {
-  function MapPropsToData() {
+  const MapPropsToData = () => {
     const colors = GetColors(props.series.length);
     return props.series.map((dataset, index) => {
       return {
@@ -16,9 +15,9 @@ const TimelinePlot = (props) => {
         borderColor: colors[index],
       };
     });
-  }
+  };
 
-  function MapPropsToOptions() {
+  const MapPropsToOptions = () => {
     return {
       elements: {
         point: {
@@ -56,7 +55,7 @@ const TimelinePlot = (props) => {
         ],
       },
     };
-  }
+  };
 
   const dataset = { datasets: MapPropsToData() };
   return (

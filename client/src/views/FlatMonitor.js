@@ -1,9 +1,6 @@
 import React from 'react';
-import '../containers/Dashboard.css';
-import TimelineDashboard from '../containers/dashboards/TimelineDashboard';
 import MeasurementsDashboard from '../containers/dashboards/MeasurementsDashboard';
-import { fetchFlatData } from '../utils/FetchServerData';
-import MiddleTemporaryCard from '../containers/dashboards/MiddleTemporaryCard';
+import { fetchFlatData, fetchSensorExtremes } from '../utils/FetchServerData';
 
 const FlatMonitor = () => {
   const [timeSeries, setTimeSeries] = React.useState({
@@ -11,43 +8,45 @@ const FlatMonitor = () => {
     humidity: [],
   });
 
-  async function handleLoadData(startTimeUnix) {
+  const handleLoadData = async (startTimeUnix) => {
     try {
       const result = await fetchFlatData(startTimeUnix);
       setTimeSeries(result);
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
+  const handleGetExtremes = async (startTimeUnix, sensor, quantity) => {
+    try {
+      // db has unix timestamp in seconds in UTC zone
+      const result = await fetchSensorExtremes(
+        startTimeUnix,
+        'LR',
+        sensor,
+        quantity
+      );
+      return new Promise((resolve, reject) => {
+        resolve(result);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className='App'>
       <h1>Living Room</h1>
-      <MiddleTemporaryCard
+      <MeasurementsDashboard
         measurements={['temperature', 'humidity']}
-        realDb='home/clima/temperature'
+        realDb='home/clima'
         loadData={handleLoadData}
         timeSeries={timeSeries}
+        showDayExtremes={true}
+        getDayExtremes={handleGetExtremes}
       />
     </div>
   );
 };
 
 export default FlatMonitor;
-
-{
-  /* <div className='row'>
-        <div className='column left-column'>
-          <MeasurementsDashboard
-            measurements={['temperature', 'humidity']}
-            realDb='home/clima'
-          />
-        </div>
-        <div className='column right-column'>
-          <TimelineDashboard
-            loadData={handleLoadData}
-            timeSeries={timeSeries}
-          />
-        </div>
-      </div> */
-}

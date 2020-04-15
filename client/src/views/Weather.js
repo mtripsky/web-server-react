@@ -1,8 +1,10 @@
 import React from 'react';
 import '../containers/Dashboard.css';
-import TimelineDashboard from '../containers/dashboards/TimelineDashboard';
 import MeasurementsDashboard from '../containers/dashboards/MeasurementsDashboard';
-import { fetchWeatherData } from '../utils/FetchServerData';
+import {
+  fetchWeatherData,
+  fetchSensorExtremes,
+} from '../utils/FetchServerData';
 
 const Weather = () => {
   const [timeSeries, setTimeSeries] = React.useState({
@@ -11,7 +13,7 @@ const Weather = () => {
     pressure: [],
   });
 
-  async function handleLoadData(startTimeUnix) {
+  const handleLoadData = async (startTimeUnix) => {
     try {
       // db has unix timestamp in seconds in UTC zone
       const result = await fetchWeatherData(startTimeUnix);
@@ -19,25 +21,36 @@ const Weather = () => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
+
+  const handleGetExtremes = async (startTimeUnix, sensor, quantity) => {
+    try {
+      // db has unix timestamp in seconds in UTC zone
+      const result = await fetchSensorExtremes(
+        startTimeUnix,
+        'OUT',
+        sensor,
+        quantity
+      );
+      return new Promise((resolve, reject) => {
+        resolve(result);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className='App'>
       <h1>Weather</h1>
-      <div className='row'>
-        <div className='column left-column'>
-          <MeasurementsDashboard
-            measurements={['temperature', 'humidity', 'pressure']}
-            realDb='weather/'
-          />
-        </div>
-        <div className='column right-column'>
-          <TimelineDashboard
-            loadData={handleLoadData}
-            timeSeries={timeSeries}
-          />
-        </div>
-      </div>
+      <MeasurementsDashboard
+        measurements={['temperature', 'humidity', 'pressure']}
+        realDb='weather/'
+        loadData={handleLoadData}
+        timeSeries={timeSeries}
+        showDayExtremes={true}
+        getDayExtremes={handleGetExtremes}
+      />
     </div>
   );
 };

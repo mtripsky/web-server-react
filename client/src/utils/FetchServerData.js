@@ -44,6 +44,40 @@ export const fetchWeatherData = async (startTime) => {
   });
 };
 
+const GetTableName = (quantity) => {
+  switch (quantity) {
+    case 'temperature':
+      return 'temperatures';
+    case 'humidity':
+      return 'humidities';
+    case 'pressure':
+      return 'pressures';
+    default:
+      break;
+  }
+};
+
+export const fetchSensorExtremes = async (
+  startTime,
+  location,
+  sensor,
+  quantity
+) => {
+  const table = GetTableName(quantity);
+  const data = await fetch(
+    `/api/${table}?startTime=${startTime}&location=${location}&sensor=${sensor}`
+  );
+  const measurements = await data.json();
+  const array = measurements.map((m) => m.value);
+
+  return new Promise((resolve, reject) => {
+    resolve({
+      min: Math.min(...array),
+      max: Math.max(...array),
+    });
+  });
+};
+
 export const fetchFlatData = async (startTime) => {
   const [tempData, humidData] = await Promise.all([
     await fetch(`/api/temperatures?startTime=${startTime}&location=LR`),
@@ -72,7 +106,7 @@ export const fetchPlantData = async (startTime, plant) => {
 
   return new Promise((resolve, reject) => {
     resolve({
-      soil_moisture: [serializeFetchedDbData(soil_moisture, 'Soil Moisture')],
+      [`${plant}`]: [serializeFetchedDbData(soil_moisture, 'Soil Moisture')],
     });
   });
 };
@@ -81,4 +115,5 @@ export default {
   fetchWeatherData,
   fetchFlatData,
   fetchPlantData,
+  fetchSensorExtremes,
 };
