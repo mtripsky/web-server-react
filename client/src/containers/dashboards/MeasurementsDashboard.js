@@ -74,6 +74,9 @@ const MeasurementsDashboard = (props) => {
 
     props.loadData(startTimeUnix);
     var fetchInterval = setInterval(function () {
+      if (moment().startOf('day').unix() >= endTimeUnix) {
+        setEndTimeUnix(moment().add(1, 'days').startOf('day').unix());
+      }
       props.loadData(startTimeUnix);
     }, intervalInMin * 60 * 1000);
 
