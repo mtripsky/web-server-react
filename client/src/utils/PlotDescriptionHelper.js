@@ -36,6 +36,7 @@ export const MapYAxisTicks = (key) => {
       return {
         suggestedMin: 30,
         suggestedMax: 90,
+        max: 100,
         display: true,
         stepSize: 10,
       };

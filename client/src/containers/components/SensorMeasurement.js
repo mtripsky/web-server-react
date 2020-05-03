@@ -4,10 +4,10 @@ import { roundToOne } from '../../utils/Calculator';
 import * as moment from 'moment';
 
 const SensorCard = (props) => {
-  const [dayMin, setDayMin] = React.useState();
-  const [dayMax, setDayMax] = React.useState();
+  const [dayMin, setDayMin] = useState(null);
+  const [dayMax, setDayMax] = useState(null);
 
-  useEffect(() => {
+  useEffect((props) => {
     if (props.showDayExtremes) {
       const fetchExtremes = async () => {
         const startOfDay = moment().startOf('day').unix();
@@ -16,8 +16,10 @@ const SensorCard = (props) => {
           props.sensorName.toUpperCase(),
           props.quantity.toLowerCase()
         );
-        setDayMin(extremes.min);
-        setDayMax(extremes.max);
+        if (extremes) {
+          setDayMin(extremes.min);
+          setDayMax(extremes.max);
+        }
       };
       fetchExtremes();
     }
@@ -25,20 +27,20 @@ const SensorCard = (props) => {
 
   const renderExtremes = (newValue) => {
     if (props.showDayExtremes) {
-      if (newValue > dayMax) {
+      if (dayMax && newValue > dayMax) {
         setDayMax(newValue);
       }
-      if (newValue < dayMin) {
+      if (dayMin && newValue < dayMin) {
         setDayMin(newValue);
       }
 
       return (
         <Card.Text>
           <small className='text-muted'>
-            Max: {dayMax}
+            Max: {dayMax ? dayMax : ''}
             {props.unit}
             <p>
-              Min: {dayMin}
+              Min: {dayMin ? dayMin : ''}
               {props.unit}
             </p>
           </small>
